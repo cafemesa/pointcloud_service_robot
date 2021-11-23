@@ -1,0 +1,15 @@
+<launch>
+
+  <node name="astra_filter" pkg="traversable_mapping" type="astra_filter" output="screen">
+    <param name="topicSubscriber" value="/camera/depth_registered/points"/> 
+    <param name="topicPublisher" value="/scan"/> 
+    <param name="frameID" value="base_link"/> 
+    <param name="robotHeight" value="0.85"/> 
+    <param name="sensorHeight" value="0.74"/> 
+    <param name="resolution" value="0.2"/> 
+    <param name="visionAngle" value="360"/> 
+  </node>
+
+</launch>
+
+
