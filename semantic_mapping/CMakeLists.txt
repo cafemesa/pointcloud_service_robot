@@ -19,5 +19,5 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-#add_executable(velodyne_people src/velodyne_people.cpp)
-#target_link_libraries(velodyne_people ${catkin_LIBRARIES})
+add_executable(semantic_people_lidar src/lidar_people.cpp)
+target_link_libraries(semantic_people_lidar ${catkin_LIBRARIES})
