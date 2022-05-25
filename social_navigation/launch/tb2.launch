@@ -121,7 +121,7 @@
         </include>
 
         <!-- LiDAR PEOPLE DETECTION --> 
-        <node name="lidar_people_sensor" pkg="semantic_mapping" type="lidar_people_sensor">
+        <node name="semantic_people_lidar" pkg="semantic_mapping" type="semantic_people_lidar">
             <param name="robot_height" value="0.8"/> 
             <param name="sensor_height" value="0.74"/> 
             <param name="horizontal_fov" value="360"/> 
@@ -133,6 +133,7 @@
             <param name="initial_robotpose_x" value="$(arg initial_pose_x)"/> 
             <param name="initial_robotpose_y" value="$(arg initial_pose_y)"/> 
             <param name="initial_robotpose_a" value="$(arg initial_pose_a)"/> 
+            <param name="maptolerance" value="3"/> 
             <param name="topic_pub_people" value="/People_PC"/> 
             <param name="sensor_topic_sub" value="/velodyne_points"/> 
             <param name="pose_topic_sub" value="/odom"/> 

@@ -27,7 +27,7 @@ public:
 	pcl::PointCloud<pcl::PointXYZ> cloudmatcher(pcl::PointCloud<pcl::PointXYZ> PeopleCloud, pcl::PointCloud<pcl::PointXYZ> LegsCloud, pcl::PointCloud<pcl::PointXYZ> TrunkCloud, float separation);
 	pcl::PointCloud<pcl::PointXYZ> mapfilter(pcl::PointCloud<pcl::PointXYZ> PeopleCloud);
 
-	float robotheight, sensorheight, resolution, legs_begin, legs_end, trunk_begin, trunk_end, pose_x, pose_y, initial_angle2, initial_angle, initial_robotpose_x, initial_robotpose_y, initial_robotpose_a;
+	float maptolerance, robotheight, sensorheight, resolution, legs_begin, legs_end, trunk_begin, trunk_end, pose_x, pose_y, initial_angle2, initial_angle, initial_robotpose_x, initial_robotpose_y, initial_robotpose_a;
 	int visionangle, position, Ncloud;
 	std::string topic_pub1, topic_pub2, topic_pub3, sensor_topic_sub, pose_topic_sub, map_topic_sub, frame_id;
 	
@@ -35,8 +35,8 @@ public:
 	int  map_width, map_height;
 	float originx, originy;
 
-	std::ofstream fs;
-	std::string filename = "people_positions.csv";
+	//std::ofstream fs;
+	//std::string filename = "people_positions.csv";
 
 private:
 	ros::NodeHandle node_, ns_;
@@ -56,6 +56,7 @@ semanticMappingPeople::semanticMappingPeople() : node_("~"),
 					 initial_robotpose_x(0.0),
 					 initial_robotpose_y(0.0),
 					 initial_robotpose_a(0.0),
+					 maptolerance(3),
 					 topic_pub1("/People_PC"),
 					 topic_pub2("/Legs_PC"),
 					 topic_pub3("/Trunk_PC"),
@@ -76,6 +77,7 @@ semanticMappingPeople::semanticMappingPeople() : node_("~"),
 	node_.param("initial_robotpose_x", initial_robotpose_x, initial_robotpose_x);
 	node_.param("initial_robotpose_y", initial_robotpose_y, initial_robotpose_y);
 	node_.param("initial_robotpose_a", initial_robotpose_a, initial_robotpose_a);
+	node_.param("maptolerance", maptolerance, maptolerance);
 
 	node_.param("topic_pub_people", topic_pub1, topic_pub1);
 	node_.param("topic_pub_legs", topic_pub2, topic_pub2);
@@ -101,8 +103,8 @@ semanticMappingPeople::semanticMappingPeople() : node_("~"),
 	pose_y = 0;
 	initial_angle2 = 0;
 
-	fs.open(filename.c_str());
-    fs << "Position X" << "," << "Position Y" << std::endl;  
+	//fs.open(filename.c_str());
+    //fs << "Position X" << "," << "Position Y" << std::endl;  
 }
 
 void semanticMappingPeople::filter(const sensor_msgs::PointCloud2ConstPtr &input)
@@ -346,7 +348,7 @@ pcl::PointCloud<pcl::PointXYZ> semanticMappingPeople::mapfilter(pcl::PointCloud<
 		else {
 			PeopleCloud[lastpos].x = PeopleCloud[i].x;
 			PeopleCloud[lastpos].y = PeopleCloud[i].y;
-			fs << PeopleCloud[lastpos].x << "," << PeopleCloud[lastpos].y << std::endl; 
+			//fs << PeopleCloud[lastpos].x << "," << PeopleCloud[lastpos].y << std::endl; 
 			lastpos++;
 		}
 	}
@@ -393,11 +395,10 @@ void semanticMappingPeople::mapCallback(const nav_msgs::OccupancyGrid::ConstPtr 
             }
             else {
                 int counter2 = 0;
-                int tol = 3;
-                int startx = x-tol;
-                int starty = y-tol; 
-                int endx = x+tol+1;
-                int endy = y+tol+1; 
+                int startx = x-maptolerance;
+                int starty = y-maptolerance; 
+                int endx = x+maptolerance+1;
+                int endy = y+maptolerance+1; 
                 if (startx<0){startx = 0;}
                 if (starty<0){starty = 0;}
                 if (endx>info.width){endx = info.width;}

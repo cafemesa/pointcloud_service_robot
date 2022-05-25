@@ -7,9 +7,11 @@ Panels:
         - /Global Options1
         - /TF1/Frames1
         - /TF1/Tree1
+        - /VelodynePointCloud1
         - /Global Map1/Planner1
         - /Local Map1/Planner1
         - /Local Map1/Trajectory Cloud1
+        - /PointCloud22
       Splitter Ratio: 0.5012468695640564
     Tree Height: 1147
   - Class: rviz/Selection
@@ -270,7 +272,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: Intensity
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -279,13 +281,13 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.009999999776482582
+      Size (m): 0.05000000074505806
       Style: Flat Squares
       Topic: /velodyne_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -605,6 +607,34 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 0; 0; 255
+      Color Transformer: FlatColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.30000001192092896
+      Style: Spheres
+      Topic: /People_PC2
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 120; 120; 120
@@ -632,7 +662,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 38.129188537597656
+      Distance: 88.81330871582031
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -640,9 +670,9 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 17.592208862304688
-        Y: 11.625395774841309
-        Z: -2.7741689682006836
+        X: 13.99975299835205
+        Y: 10.775218963623047
+        Z: 2.0335140228271484
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -650,7 +680,7 @@ Visualization Manager:
       Near Clip Distance: 0.009999999776482582
       Pitch: 1.5697963237762451
       Target Frame: <Fixed Frame>
-      Yaw: 1.5700000524520874
+      Yaw: 1.5931612253189087
     Saved: ~
 Window Geometry:
   Displays:

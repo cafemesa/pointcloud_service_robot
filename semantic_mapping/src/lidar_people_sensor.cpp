@@ -427,7 +427,6 @@ pcl::PointCloud<pcl::PointXYZ> semanticMappingPeople::rotatePC(pcl::PointCloud<p
 	return PeopleCloud;
 }
 
-
 /** Map Callback */
 void semanticMappingPeople::mapCallback(const nav_msgs::OccupancyGrid::ConstPtr &msg)
 {

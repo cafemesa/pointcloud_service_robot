@@ -65,6 +65,7 @@ void velodyneFilter::pcCallback (const sensor_msgs::PointCloud2ConstPtr& input)
 		float hangle = (asin ((laserCloudIn[i].x)/hip))*180/PI;
 
 		// Vertical filter : Points with a height greater than the height of the robot are discarded
+		if (laserCloudIn[i].z < -sensorHeight + 0.1) {continue;}
 		if (laserCloudIn[i].z > robotHeight-sensorHeight || (-sensorHeight-0.1<=laserCloudIn[i].z && laserCloudIn[i].z < -sensorHeight + 0.05)) {continue;}
 
 		// Dicard points outside the area of interest (Horizontal Filter)
