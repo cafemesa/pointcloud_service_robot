@@ -6,6 +6,10 @@
 #include <nav_msgs/OccupancyGrid.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <math.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <std_msgs/String.h>
 #include "nav_msgs/Odometry.h"
 #define PI 3.14159265
 
@@ -30,6 +34,9 @@ public:
 	int** maparray;
 	int  map_width, map_height;
 	float originx, originy;
+
+	std::ofstream fs;
+	std::string filename = "people_positions.csv";
 
 private:
 	ros::NodeHandle node_, ns_;
@@ -93,6 +100,9 @@ semanticMappingPeople::semanticMappingPeople() : node_("~"),
 	pose_x = 0;
 	pose_y = 0;
 	initial_angle2 = 0;
+
+	fs.open(filename.c_str());
+    fs << "Position X" << "," << "Position Y" << std::endl;  
 }
 
 void semanticMappingPeople::filter(const sensor_msgs::PointCloud2ConstPtr &input)
@@ -186,13 +196,13 @@ void semanticMappingPeople::filter(const sensor_msgs::PointCloud2ConstPtr &input
 	//Publish LegsCloud
 	sensor_msgs::PointCloud2 LegsCloud_output;
 	pcl::toROSMsg(TrunkCloud, LegsCloud_output);
-	LegsCloud_output.header.frame_id = "base_link";
+	LegsCloud_output.header.frame_id = "map";
 	legs_pub.publish(LegsCloud_output);
 
 	//Publish TrunkCloud
 	sensor_msgs::PointCloud2 TrunkCloud_output;
 	pcl::toROSMsg(TrunkCloud, TrunkCloud_output);
-	TrunkCloud_output.header.frame_id = "base_link";
+	TrunkCloud_output.header.frame_id = "map";
 	trunk_pub.publish(TrunkCloud_output);
 
 	
@@ -336,6 +346,7 @@ pcl::PointCloud<pcl::PointXYZ> semanticMappingPeople::mapfilter(pcl::PointCloud<
 		else {
 			PeopleCloud[lastpos].x = PeopleCloud[i].x;
 			PeopleCloud[lastpos].y = PeopleCloud[i].y;
+			fs << PeopleCloud[lastpos].x << "," << PeopleCloud[lastpos].y << std::endl; 
 			lastpos++;
 		}
 	}
@@ -418,6 +429,8 @@ int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "velodyne_people");
 	semanticMappingPeople filter;
+	
+    
 	ros::spin();
 	return 0;
 }

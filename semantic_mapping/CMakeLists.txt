@@ -21,3 +21,9 @@ include_directories(
 
 add_executable(semantic_people_lidar src/lidar_people.cpp)
 target_link_libraries(semantic_people_lidar ${catkin_LIBRARIES})
+
+add_executable(pc2csv src/pc2csv.cpp)
+target_link_libraries(pc2csv ${catkin_LIBRARIES})
+
+add_executable(lidar_people_sensor src/lidar_people_sensor.cpp)
+target_link_libraries(lidar_people_sensor ${catkin_LIBRARIES})

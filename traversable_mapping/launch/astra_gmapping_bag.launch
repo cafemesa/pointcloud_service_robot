@@ -2,7 +2,7 @@
 
   <!--
   Terminal 1. roscore
-  Terminal 2. rosparam set use_sim_time true && roslaunch pff astra_bag_slam.launch
+  Terminal 2. rosparam set use_sim_time true && roslaunch traversable_mapping astra_gmapping_bag.launch
   Terminal 3. rosbag play - -clock [BAG_NAME]
   -->
 

@@ -28,4 +28,7 @@ target_link_libraries(astra_filter ${catkin_LIBRARIES})
 add_executable(kinect_filter src/kinect_filter.cpp)
 target_link_libraries(kinect_filter ${catkin_LIBRARIES})
 
+add_executable(velodyne_filter_sensor src/velodyne_filter_sensor.cpp)
+target_link_libraries(velodyne_filter_sensor ${catkin_LIBRARIES})
+
 

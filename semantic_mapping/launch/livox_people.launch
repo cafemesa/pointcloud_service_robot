@@ -1,0 +1,36 @@
+<launch>   
+
+  <!-- start PointCloud Fast Filter -->
+<arg name="filter_start_delay" default="1.0" /> 
+  <node name="velodyne_filter" pkg="traversable_mapping" type="velodyne_filter" launch-prefix="bash -c 'sleep $(arg filter_start_delay); $0 $@' ">
+    <param name="topicSubscriber" value="/livox/lidar"/> 
+    <param name="topicPublisher" value="/scan"/> 
+    <param name="frameID" value="base_link"/> 
+    <param name="robotHeight" value="0.85"/> 
+    <param name="sensorHeight" value="0.74"/> 
+    <param name="resolution" value="0.2"/> 
+    <param name="visionAngle" value="180"/> 
+  </node> 
+
+  <!-- start PointCloud people detection -->
+  <arg name="node_start_delay" default="1.0" />  
+  <node name="semantic_people_lidar" pkg="semantic_mapping" type="semantic_people_lidar" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
+    <param name="robot_height" value="0.85"/> 
+    <param name="sensor_height" value="0.70"/> 
+    <param name="horizontal_fov" value="180"/> 
+    <param name="resolution" value="0.1"/> 
+    <param name="legs_begin" value="0.25"/> 
+    <param name="legs_end" value="0.65"/> 
+    <param name="trunk_begin" value="0.8"/> 
+    <param name="trunk_end" value="1.6"/> 
+    <param name="initial_robotpose_x" value="1.2"/> 
+    <param name="initial_robotpose_y" value="-1.0"/> 
+    <param name="initial_robotpose_a" value="0.607"/> 
+    <param name="topic_pub_people" value="/People_PC"/> 
+    <param name="sensor_topic_sub" value="/livox/lidar"/> 
+    <param name="pose_topic_sub" value="/odom"/> 
+    <param name="map_topic_sub" value="/map"/> 
+    <param name="frame_id" value="map"/> 
+  </node> 
+
+</launch>

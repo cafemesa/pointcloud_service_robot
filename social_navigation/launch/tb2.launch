@@ -1,0 +1,150 @@
+   <launch>   
+
+   <!-- MAIN VARIABLES -->
+    <arg name="task" default="Navigation" doc="Task type [Navigation, Mapping]"/>/>
+    <arg name="initial_pose_x" default="0.0" doc="Used in Navigation"/> 
+    <arg name="initial_pose_y" default="0.0" doc="Used in Navigation"/> 
+    <arg name="initial_pose_a" default="0.0" doc="Used in Navigation"/>
+  
+    <!-- VELODYNE NODES-->
+    <!-- declare arguments with default values -->
+    <arg name="calibration" default="$(find velodyne_pointcloud)/params/VLP16db.yaml"/>
+    <arg name="device_ip" default="" />
+    <arg name="frame_id" default="base_link" />
+    <arg name="manager" default="$(arg frame_id)_nodelet_manager" />
+    <arg name="max_range" default="130.0" />
+    <arg name="min_range" default="0.4" />
+    <arg name="pcap" default="" />
+    <arg name="port" default="2368" />
+    <arg name="read_fast" default="false" />
+    <arg name="read_once" default="false" />
+    <arg name="repeat_delay" default="0.0" />
+    <arg name="rpm" default="600.0" />
+    <arg name="gps_time" default="false" />
+    <arg name="pcap_time" default="false" />
+    <arg name="cut_angle" default="-0.01" />
+    <arg name="timestamp_first_packet" default="false" />
+    <arg name="laserscan_ring" default="-1" />
+    <arg name="laserscan_resolution" default="0.007" />
+    <arg name="organize_cloud" default="false" />
+
+    <!-- start nodelet manager and driver nodelets -->
+    <include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
+        <arg name="device_ip" value="$(arg device_ip)"/>
+        <arg name="frame_id" value="$(arg frame_id)"/>
+        <arg name="manager" value="$(arg manager)" />
+        <arg name="model" value="VLP16"/>
+        <arg name="pcap" value="$(arg pcap)"/>
+        <arg name="port" value="$(arg port)"/>
+        <arg name="read_fast" value="$(arg read_fast)"/>
+        <arg name="read_once" value="$(arg read_once)"/>
+        <arg name="repeat_delay" value="$(arg repeat_delay)"/>
+        <arg name="rpm" value="$(arg rpm)"/>
+        <arg name="gps_time" value="$(arg gps_time)"/>
+        <arg name="pcap_time" value="$(arg pcap_time)"/>
+        <arg name="cut_angle" value="$(arg cut_angle)"/>
+        <arg name="timestamp_first_packet" value="$(arg timestamp_first_packet)"/>
+    </include>
+
+    <!-- start transform nodelet -->
+    <include file="$(find velodyne_pointcloud)/launch/transform_nodelet.launch">
+        <arg name="model" value="VLP16"/>
+        <arg name="calibration" value="$(arg calibration)"/>
+        <arg name="manager" value="$(arg manager)" />
+        <arg name="fixed_frame" value="" />
+        <arg name="target_frame" value="" />
+        <arg name="max_range" value="$(arg max_range)"/>
+        <arg name="min_range" value="$(arg min_range)"/>
+        <arg name="organize_cloud" value="$(arg organize_cloud)"/>
+    </include>
+
+    <!-- start laserscan nodelet -->
+    <include file="$(find velodyne_pointcloud)/launch/laserscan_nodelet.launch">
+        <arg name="manager" value="$(arg manager)" />
+        <arg name="ring" value="$(arg laserscan_ring)"/>
+        <arg name="resolution" value="$(arg laserscan_resolution)"/>
+    </include>
+
+    <!-- Start filter -->
+    <node name="velodyne_filter" pkg="traversable_mapping" type="velodyne_filter">
+        <param name="topicSubscriber" value="/velodyne_points"/> 
+        <param name="topicPublisher" value="/scan_traversable"/> 
+        <param name="frameID" value="base_link"/> 
+        <param name="robotHeight" value="0.80"/> 
+        <param name="sensorHeight" value="0.74"/> 
+        <param name="resolution" value="0.2"/> 
+        <param name="visionAngle" value="360"/> 
+    </node>
+
+    <!-- start Turtlebot -->
+    <include file="$(find turtlebot_bringup)/launch/minimal.launch">
+        <arg name="serialport" value="/dev/ttyUSB0"/>
+    </include>
+
+
+    <!-- START MAPPING NODES -->
+    <group if="$(eval task == 'Mapping')">
+
+        <!-- start gmapping -->
+        <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
+            <remap from="scan" to="scan_traversable"/>
+            <param name="map_update_interval" value="5.0"/>      
+            <param name="linearUpdate" value="0.0"/>
+            <param name="angularUpdate" value="0.0"/>
+        </node>	
+
+        <!-- start rviz -->
+        <node type="rviz" name="rviz" pkg="rviz" args="-d $(find social_navigation)/rviz_cfg/slam.rviz" />
+
+    </group>
+
+
+    <!-- START NAVIGATION NODES -->
+    <group if="$(eval task == 'Navigation')">
+
+        <!-- Map server -->
+        <node name="map_server" pkg="map_server" type="map_server" args="$(find social_navigation)/maps/office.yaml" />
+
+        <!-- AMCL -->
+        <arg name="custom_amcl_launch_file" default="$(find turtlebot_navigation)/launch/includes/amcl/amcl.launch.xml"/>
+        <include file="$(arg custom_amcl_launch_file)">
+            <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+            <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+            <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+            <arg name="scan_topic"      default="scan_traversable"/> 
+        </include>
+
+        <!-- Move base -->
+        <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml">
+            <arg name="laser_topic" default="scan_traversable" />
+            <arg name="custom_param_file" value="$(find turtlebot_navigation)/param/$(env TURTLEBOT_3D_SENSOR)_costmap_params.yaml"/>
+        </include>
+
+        <!-- LiDAR PEOPLE DETECTION --> 
+        <node name="lidar_people_sensor" pkg="semantic_mapping" type="lidar_people_sensor">
+            <param name="robot_height" value="0.8"/> 
+            <param name="sensor_height" value="0.74"/> 
+            <param name="horizontal_fov" value="360"/> 
+            <param name="resolution" value="0.1"/> 
+            <param name="legs_begin" value="0.3"/> 
+            <param name="legs_end" value="0.6"/> 
+            <param name="trunk_begin" value="0.8"/> 
+            <param name="trunk_end" value="1.3"/> 
+            <param name="initial_robotpose_x" value="$(arg initial_pose_x)"/> 
+            <param name="initial_robotpose_y" value="$(arg initial_pose_y)"/> 
+            <param name="initial_robotpose_a" value="$(arg initial_pose_a)"/> 
+            <param name="topic_pub_people" value="/People_PC"/> 
+            <param name="sensor_topic_sub" value="/velodyne_points"/> 
+            <param name="pose_topic_sub" value="/odom"/> 
+            <param name="map_topic_sub" value="/map"/> 
+            <param name="frame_id" value="map"/> 
+        </node>
+
+        <!-- start rviz -->
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find social_navigation)/rviz_cfg/navigation.rviz"/>
+
+    </group>
+
+
+</launch>
+  

@@ -1,0 +1,81 @@
+<launch>   
+
+  <!--arg name="initial_pose_x" default="4.7097763443"/>
+  <arg name="initial_pose_y" default="-0.920042695999"/>
+  <arg name="initial_pose_a" default="1.570789"/-->
+
+  <arg name="initial_pose_x" default="0.0"/>
+  <arg name="initial_pose_y" default="0.0"/>
+  <arg name="initial_pose_a" default="0.0"/>
+
+  <!--node name="velodyne_filter_sensor" pkg="traversable_mapping" type="velodyne_filter_sensor">
+    <param name="topicSubscriber" value="/velodyne_points"/> 
+    <param name="topicPublisher" value="/scan"/> 
+    <param name="frameID" value="base_link"/> 
+    <param name="robotHeight" value="0.85"/> 
+    <param name="sensorHeight" value="0.74"/> 
+    <param name="resolution" value="1"/> 
+    <param name="visionAngle" value="360"/> 
+    <param name="initial_angle" value="$(arg initial_pose_a)"/> 
+    <param name="initial_robotpose_x" value="$(arg initial_pose_x)"/> 
+    <param name="initial_robotpose_y" value="$(arg initial_pose_y)"/> 
+  </node--> 
+    
+  <arg name="node_start_delay" default="5.0" />  
+  <node name="lidar_people_sensor" pkg="semantic_mapping" type="lidar_people_sensor" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
+    <param name="robot_height" value="2.85"/> 
+    <param name="sensor_height" value="0.74"/> 
+    <param name="horizontal_fov" value="360"/> 
+    <param name="resolution" value="0.1"/> 
+    <param name="legs_begin" value="0.15"/> 
+    <param name="legs_end" value="0.7"/> 
+    <param name="trunk_begin" value="0.8"/> 
+    <param name="trunk_end" value="1.6"/> 
+    <param name="initial_robotpose_x" value="$(arg initial_pose_x)"/> 
+    <param name="initial_robotpose_y" value="$(arg initial_pose_y)"/> 
+    <param name="initial_robotpose_a" value="$(arg initial_pose_a)"/> 
+    <param name="topic_pub_people" value="/People_PC"/> 
+    <param name="sensor_topic_sub" value="/velodyne_points"/> 
+    <param name="pose_topic_sub" value="/odom"/> 
+    <param name="map_topic_sub" value="/map"/> 
+    <param name="frame_id" value="map"/> 
+  </node>
+
+  <!--arg name="initial_pose_x" default="25.6836624146"/>
+  <arg name="initial_pose_y" default="1.05934980392"/>
+  <arg name="initial_pose_a" default="-3.092"/>
+
+  <node name="velodyne_filter_sensor" pkg="traversable_mapping" type="velodyne_filter_sensor">
+    <param name="topicSubscriber" value="/livox/lidar"/> 
+    <param name="topicPublisher" value="/scan"/> 
+    <param name="frameID" value="base_link"/> 
+    <param name="robotHeight" value="0.85"/> 
+    <param name="sensorHeight" value="0.72"/> 
+    <param name="resolution" value="1"/> 
+    <param name="visionAngle" value="180"/> 
+    <param name="initial_angle" value="$(arg initial_pose_a)"/> 
+    <param name="initial_robotpose_x" value="$(arg initial_pose_x)"/> 
+    <param name="initial_robotpose_y" value="$(arg initial_pose_y)"/> 
+  </node> 
+    
+  <arg name="node_start_delay" default="0.0" />  
+  <node name="lidar_people_sensor" pkg="semantic_mapping" type="lidar_people_sensor" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
+    <param name="robot_height" value="2.00"/> 
+    <param name="sensor_height" value="0.55"/> 
+    <param name="horizontal_fov" value="360"/> 
+    <param name="resolution" value="0.1"/> 
+    <param name="legs_begin" value="0.3"/> 
+    <param name="legs_end" value="0.6"/> 
+    <param name="trunk_begin" value="0.8"/> 
+    <param name="trunk_end" value="1.3"/> 
+    <param name="initial_robotpose_x" value="$(arg initial_pose_x)"/> 
+    <param name="initial_robotpose_y" value="$(arg initial_pose_y)"/> 
+    <param name="initial_robotpose_a" value="$(arg initial_pose_a)"/> 
+    <param name="topic_pub_people" value="/People_PC"/> 
+    <param name="sensor_topic_sub" value="/livox/lidar"/> 
+    <param name="pose_topic_sub" value="/odom"/> 
+    <param name="map_topic_sub" value="/map"/> 
+    <param name="frame_id" value="map"/> 
+  </node-->
+
+</launch>
