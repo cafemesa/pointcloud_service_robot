@@ -20,8 +20,8 @@ include_directories(
 )
 
 
-#add_executable(gazebo_variables src/gazebo.cpp)
-#target_link_libraries(gazebo_variables ${catkin_LIBRARIES})
+add_executable(gazebo_variables src/gazebo.cpp)
+target_link_libraries(gazebo_variables ${catkin_LIBRARIES})
 
 #add_executable(proxemics src/proxemics.cpp)
 #target_link_libraries(proxemics ${catkin_LIBRARIES})

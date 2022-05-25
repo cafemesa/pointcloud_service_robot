@@ -2,9 +2,9 @@
 
    <!-- MAIN VARIABLES -->
     <arg name="task" default="Navigation" doc="Task type [Navigation, Mapping]"/>/>
-    <arg name="initial_pose_x" default="0.0" doc="Used in Navigation"/> 
-    <arg name="initial_pose_y" default="0.0" doc="Used in Navigation"/> 
-    <arg name="initial_pose_a" default="0.0" doc="Used in Navigation"/>
+    <arg name="initial_pose_x" default="13.77" doc="Used in Navigation"/> 
+    <arg name="initial_pose_y" default="33.34" doc="Used in Navigation"/> 
+    <arg name="initial_pose_a" default="-1.7054499" doc="Used in Navigation"/>
   
     <!-- VELODYNE NODES-->
     <!-- declare arguments with default values -->
@@ -121,7 +121,7 @@
         </include>
 
         <!-- LiDAR PEOPLE DETECTION --> 
-        <node name="semantic_people_lidar" pkg="semantic_mapping" type="semantic_people_lidar">
+        <!--node name="semantic_people_lidar" pkg="semantic_mapping" type="semantic_people_lidar">
             <param name="robot_height" value="0.8"/> 
             <param name="sensor_height" value="0.74"/> 
             <param name="horizontal_fov" value="360"/> 
@@ -139,7 +139,7 @@
             <param name="pose_topic_sub" value="/odom"/> 
             <param name="map_topic_sub" value="/map"/> 
             <param name="frame_id" value="map"/> 
-        </node>
+        </node-->
 
         <!-- start rviz -->
         <node name="rviz" pkg="rviz" type="rviz" args="-d $(find social_navigation)/rviz_cfg/navigation.rviz"/>

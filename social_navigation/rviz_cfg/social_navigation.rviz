@@ -11,7 +11,6 @@ Panels:
         - /Global Map1/Planner1
         - /Local Map1/Planner1
         - /Local Map1/Trajectory Cloud1
-        - /PointCloud22
       Splitter Ratio: 0.5012468695640564
     Tree Height: 1147
   - Class: rviz/Selection
@@ -591,11 +590,11 @@ Visualization Manager:
       Color: 0; 0; 255
       Color Transformer: FlatColor
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
-      Name: PointCloud2
+      Name: SemanticPeople
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
@@ -606,7 +605,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -623,14 +622,14 @@ Visualization Manager:
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
-      Name: PointCloud2
+      Name: GazeboPeople
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
       Size (m): 0.30000001192092896
       Style: Spheres
-      Topic: /People_PC2
+      Topic: /gazebo_actors
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

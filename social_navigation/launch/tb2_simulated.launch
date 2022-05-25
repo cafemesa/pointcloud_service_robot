@@ -4,8 +4,8 @@
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="use_sim_time" value="true"/>
         <arg name="debug" value="false"/>
-        <arg name="gui" value="false" />
-        <arg name="world_name" value="$(find social_navigation)/worlds/office_two_person_opt2.world"/>
+        <arg name="gui" value="true" />
+        <arg name="world_name" value="$(find social_navigation)/worlds/office_three_person.world"/>
     </include>
     
     <arg name="urdf_file" default="$(find xacro)/xacro '$(find project_2021)/launch/Turlebot_Velodyne_Model/kobuki.urdf.xacro'"/>
